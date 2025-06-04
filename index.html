@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Покемон-баттл</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Приветственный экран -->
+    <div id="welcome-screen" class="screen active">
+        <div class="welcome-container">
+            <h1>Добро пожаловать в <span>Покемон-баттл!</span></h1>
+            <div class="input-container">
+                <input type="text" id="username" placeholder="Введите ваше имя">
+            </div>
+            <button id="start-btn" class="main-btn">
+                Начать игру
+            </button>
+        </div>
+    </div>
+
+    <!-- Основной экран -->
+    <div id="main-screen" class="screen">
+        <header>
+            <h1 id="greeting">Привет, <span id="user-name"></span>!</h1>
+            <button id="stats-btn" class="stats-btn">Статистика</button>
+            
+        </header>
+    
+    <div id="stats-container" class="stats-container hidden">
+        <div class="stats-header">
+            <h2>История боев</h2>
+            <button id="close-stats" class="close-stats">×</button>
+        </div>
+        <div id="stats-table" class="stats-table"></div>
+    </div>
+
+        <main>
+            <div id="pokemon-selection" class="selection-container">
+                <h2>Это что за покемон?</h2>
+                <button id="choose-fighter" class="main-btn pokeball-btn">
+                    Выбрать бойца
+                </button>
+                
+                <div id="selected-pokemon" class="hidden">
+                    <div id="pokemon-display" class="pokemon-card"></div>
+                    <div class="action-buttons">
+                        <button id="battle-btn" class="action-btn battle-btn">
+                            <span class="btn-text">В БОЙ!</span>
+                            <span class="btn-icon">⚔️</span>
+                        </button>
+                        <button id="change-fighter" class="action-btn change-btn">
+                            <span class="btn-text">СМЕНИТЬ БОЙЦА</span>
+                            <span class="btn-icon">🔄</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="battle-screen" class="hidden battle-container">
+                <div id="battle-pokemons" class="battle-arena">
+                    <div class="pokemon-card" id="player-pokemon"></div>
+                    <div class="vs-circle">
+                        <span>VS</span>
+                    </div>
+                    <div class="pokemon-card" id="enemy-pokemon"></div>
+                </div>
+                <div id="bet-section" class="bet-container">
+                    <h3>Сделайте ставку: кто победит?</h3>
+                    <div id="bet-buttons" class="bet-buttons-grid"></div>
+                    <button id="fight-btn" class="main-btn fight-btn hidden">
+                        НАЧАТЬ БИТВУ
+                    </button>
+                </div>
+            </div>
+
+            <div id="result-screen" class="hidden result-container">
+                <div class="result-content">
+                    <h2>ПОБЕДИТЕЛЬ:</h2>
+                    <div id="winner-display" class="winner-card"></div>
+                    <div class="action-buttons">
+                        <button id="save-btn" class="action-btn save-btn">
+                            СОХРАНИТЬ
+                        </button>
+                        <button id="new-battle" class="action-btn new-btn">
+                            НОВЫЙ БОЙ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
