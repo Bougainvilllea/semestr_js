@@ -90,7 +90,5 @@ function capitalizeFirstLetter(string) {
 }
 
 function savePokemonImage(pokemon) {
-    // Реализация сохранения изображения!!!!!!!
-    // Можно использовать библиотеку FileSaver.js или canvas???
     console.log('Saving image of', pokemon.name);
 }
