@@ -1,4 +1,7 @@
-
+// Импорт функций из других модулей
+// data.js - функции для работы с API покемонов
+// view.js - функции для работы с интерфейсом
+// utils.js - вспомогательные функции
 import { fetchRandomPokemon, fetchPokemonDetails } from './data.js';
 import { 
     showMainScreen,
@@ -11,19 +14,19 @@ import {
     enableSaveButton,
     resetUI
 } from './view.js';
-
 import { getRandomPokemonId, simulateBattle } from './utils.js';
 
-// Глобальные переменные состояния
-let userName = '';
-let playerPokemon = null;
-let enemyPokemon = null;
-let selectedForBet = null;
-let winner = null;
-let battleHistory = [];
+// Глобальные переменные состояния приложения
+let userName = '';          // Имя пользователя
+let playerPokemon = null;   // Покемон игрока
+let enemyPokemon = null;    // Покемон противника
+let selectedForBet = null;  // На кого поставил пользователь
+let winner = null;          // Победитель битвы
+let battleHistory = [];     // История всех битв
 
-// Инициализация приложения
+// Инициализация приложения после загрузки DOM
 document.addEventListener('DOMContentLoaded', () => {
+    // Получаем кнопки и назначаем обработчики событий
     const startBtn = document.getElementById('start-btn');
     startBtn.addEventListener('click', handleStart);
 
@@ -45,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const newBattleBtn = document.getElementById('new-battle');
     newBattleBtn.addEventListener('click', handleNewBattle);
 
+    // Обработчики для статистики
     const statsBtn = document.getElementById('stats-btn');
     const closeStatsBtn = document.getElementById('close-stats');
     
@@ -61,64 +65,74 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-
+// Вспомогательная функция для форматирования строк (первая буква заглавная)
 function capitalizeFirstLetter(string) {
-    if (!string) return '';
+    if (!string) return '';  // Проверка на пустую строку
     return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
-// Обработчики событий
+// ========== ОБРАБОТЧИКИ СОБЫТИЙ ==========
+
+// Обработчик начала игры
 async function handleStart() {
-    userName = document.getElementById('username').value.trim();
+    userName = document.getElementById('username').value.trim(); // Получаем имя пользователя
     if (!userName) {
         alert('Пожалуйста, введите ваше имя');
         return;
     }
-    showMainScreen(userName);
+    showMainScreen(userName); // Показываем основной экран
 }
 
+// Обработчик выбора покемона-бойца
 async function handleChooseFighter() {
-    const pokemonId = getRandomPokemonId();
-    playerPokemon = await fetchPokemonDetails(pokemonId);
-    displayPokemon(playerPokemon, 'pokemon-display');
-    document.getElementById('battle-btn').classList.remove('hidden');
+    const pokemonId = getRandomPokemonId(); // Получаем случайный ID покемона
+    playerPokemon = await fetchPokemonDetails(pokemonId); // Загружаем детали покемона
+    displayPokemon(playerPokemon, 'pokemon-display'); // Отображаем покемона
+    document.getElementById('battle-btn').classList.remove('hidden'); // Показываем кнопку битвы
 }
 
+// Обработчик начала битвы
 async function handleBattle() {
-    const pokemonId = getRandomPokemonId();
-    enemyPokemon = await fetchPokemonDetails(pokemonId);
-    showBattleScreen();
-    displayBattlePokemons(playerPokemon, enemyPokemon);
-    showBetButtons(playerPokemon, enemyPokemon, handleBetSelection);
+    const pokemonId = getRandomPokemonId(); // Получаем случайный ID для противника
+    enemyPokemon = await fetchPokemonDetails(pokemonId); // Загружаем детали покемона противника
+    showBattleScreen(); // Показываем экран битвы
+    displayBattlePokemons(playerPokemon, enemyPokemon); // Отображаем обоих покемонов
+    showBetButtons(playerPokemon, enemyPokemon, handleBetSelection); // Показываем кнопки для ставок
 }
 
+// Обработчик выбора ставки
 function handleBetSelection(selectedPokemon) {
-    selectedForBet = selectedPokemon;
-    showFightButton();
+    selectedForBet = selectedPokemon; // Сохраняем выбранного покемона
+    showFightButton(); // Показываем кнопку "Драться"
 }
 
+// Обработчик битвы покемонов
 async function handleFight() {
+    // Определяем победителя с помощью симуляции
     winner = simulateBattle(playerPokemon, enemyPokemon);
+    // Определяем проигравшего
     const loser = winner.name === playerPokemon.name ? enemyPokemon : playerPokemon;
     
-    // Добавляем запись в историю
+    // Добавляем запись в историю битв
     battleHistory.push({
         winner: winner,
         loser: loser,
-        date: new Date().toLocaleString(),
-        userBet: selectedForBet.name
+        date: new Date().toLocaleString(), // Текущая дата и время
+        userBet: selectedForBet.name // На кого ставил пользователь
     });
     
+    // Показываем результат битвы
     showResult(winner, selectedForBet);
 }
 
+// Обработчик сохранения изображения покемона
 async function handleSave() {
-    if (!winner || !winner.image) return;
+    if (!winner || !winner.image) return; // Проверяем наличие победителя и его изображения
     
     try {
         // Создаем временный элемент изображения
         const img = new Image();
-        img.crossOrigin = "Anonymous";
+        img.crossOrigin = "Anonymous"; // Разрешаем кросс-доменные запросы
         img.src = winner.image;
         
         // Ждем загрузки изображения
@@ -127,20 +141,20 @@ async function handleSave() {
             img.onerror = reject;
         });
         
-        // Создаем canvas такого же размера как изображение
+        // Создаем canvas для обработки изображения
         const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
+        canvas.width = img.naturalWidth; // Ширина оригинального изображения
+        canvas.height = img.naturalHeight; // Высота оригинального изображения
         const ctx = canvas.getContext('2d');
         
-        // Рисуем только изображение покемона
+        // Рисуем изображение на canvas
         ctx.drawImage(img, 0, 0);
         
-        // Сохраняем как PNG
+        // Создаем ссылку для скачивания
         const link = document.createElement('a');
-        link.download = `pokemon_${winner.name}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
+        link.download = `pokemon_${winner.name}.png`; // Имя файла
+        link.href = canvas.toDataURL('image/png'); // Данные изображения в формате PNG
+        link.click(); // Программный клик для скачивания
         
     } catch (error) {
         console.error('Error saving pokemon image:', error);
@@ -148,14 +162,16 @@ async function handleSave() {
     }
 }
 
+// Обработчик новой битвы (сброс состояния)
 function handleNewBattle() {
-    resetUI();
-    playerPokemon = null;
-    enemyPokemon = null;
-    selectedForBet = null;
-    winner = null;
+    resetUI(); // Сбрасываем интерфейс
+    playerPokemon = null; // Очищаем покемона игрока
+    enemyPokemon = null; // Очищаем покемона противника
+    selectedForBet = null; // Очищаем ставку
+    winner = null; // Очищаем победителя
 }
 
+// Функция показа статистики
 function showStats() {
     const statsContainer = document.getElementById('stats-container');
     if (!statsContainer) {
@@ -169,13 +185,14 @@ function showStats() {
         return;
     }
 
-    statsTable.innerHTML = '';
+    statsTable.innerHTML = ''; // Очищаем таблицу
     
     if (battleHistory.length === 0) {
-        statsTable.innerHTML = '<p>Нет данных о боях</p>';
+        statsTable.innerHTML = '<p>Нет данных о боях</p>'; // Сообщение если нет истории
     } else {
+        // Для каждой битвы в истории создаем карточки
         battleHistory.forEach((battle, index) => {
-            // Создаем контейнер для одной записи боя
+            // Контейнер для одной записи боя
             const battleRecord = document.createElement('div');
             battleRecord.className = 'battle-record';
             
@@ -208,5 +225,5 @@ function showStats() {
         });
     }
     
-    statsContainer.classList.remove('hidden');
+    statsContainer.classList.remove('hidden'); // Показываем контейнер статистики
 }

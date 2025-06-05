@@ -1,56 +1,79 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Покемон-баттл</title>
+    <!-- Базовые настройки документа -->
+    <meta charset="UTF-8"> <!-- Кодировка UTF-8 для поддержки русских символов -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Адаптивность для мобильных устройств -->
+    <title>Покемон-баттл</title> <!-- Заголовок вкладки браузера -->
+    
+    <!-- Подключение шрифта Poppins с Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+    <!-- Подключение CSS-файла -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-    <!-- Приветственный экран -->
+    <!-- ========== ПРИВЕТСТВЕННЫЙ ЭКРАН ========== -->
     <div id="welcome-screen" class="screen active">
         <div class="welcome-container">
             <h1>Добро пожаловать в <span>Покемон-баттл!</span></h1>
+            
+            <!-- Поле ввода имени пользователя -->
             <div class="input-container">
                 <input type="text" id="username" placeholder="Введите ваше имя">
             </div>
+            
+            <!-- Кнопка начала игры -->
             <button id="start-btn" class="main-btn">
                 Начать игру
             </button>
         </div>
     </div>
 
-    <!-- Основной экран -->
+    <!-- ========== ОСНОВНОЙ ЭКРАН ========== -->
     <div id="main-screen" class="screen">
+        <!-- Шапка с приветствием и кнопкой статистики -->
         <header>
             <h1 id="greeting">Привет, <span id="user-name"></span>!</h1>
             <button id="stats-btn" class="stats-btn">Статистика</button>
-            
         </header>
     
-    <div id="stats-container" class="stats-container hidden">
-        <div class="stats-header">
-            <h2>История боев</h2>
-            <button id="close-stats" class="close-stats">×</button>
+        <!-- Контейнер статистики (изначально скрыт) -->
+        <div id="stats-container" class="stats-container hidden">
+            <div class="stats-header">
+                <h2>История боев</h2>
+                <!-- Кнопка закрытия статистики -->
+                <button id="close-stats" class="close-stats">×</button>
+            </div>
+            <!-- Таблица для вывода истории боев -->
+            <div id="stats-table" class="stats-table"></div>
         </div>
-        <div id="stats-table" class="stats-table"></div>
-    </div>
 
+        <!-- Основное содержимое -->
         <main>
+            <!-- Экран выбора покемона -->
             <div id="pokemon-selection" class="selection-container">
                 <h2>Это что за покемон?</h2>
+                
+                <!-- Кнопка выбора бойца -->
                 <button id="choose-fighter" class="main-btn pokeball-btn">
                     Выбрать бойца
                 </button>
                 
+                <!-- Контейнер для выбранного покемона (изначально скрыт) -->
                 <div id="selected-pokemon" class="hidden">
+                    <!-- Блок для отображения покемона -->
                     <div id="pokemon-display" class="pokemon-card"></div>
+                    
+                    <!-- Кнопки действий -->
                     <div class="action-buttons">
+                        <!-- Кнопка начала битвы -->
                         <button id="battle-btn" class="action-btn battle-btn">
                             <span class="btn-text">В БОЙ!</span>
                             <span class="btn-icon">⚔️</span>
                         </button>
+                        
+                        <!-- Кнопка смены покемона -->
                         <button id="change-fighter" class="action-btn change-btn">
                             <span class="btn-text">СМЕНИТЬ БОЙЦА</span>
                             <span class="btn-icon">🔄</span>
@@ -59,31 +82,52 @@
                 </div>
             </div>
 
+            <!-- Экран битвы (изначально скрыт) -->
             <div id="battle-screen" class="hidden battle-container">
+                <!-- Арена с покемонами -->
                 <div id="battle-pokemons" class="battle-arena">
+                    <!-- Покемон игрока -->
                     <div class="pokemon-card" id="player-pokemon"></div>
+                    
+                    <!-- Круг с надписью VS -->
                     <div class="vs-circle">
                         <span>VS</span>
                     </div>
+                    
+                    <!-- Покемон противника -->
                     <div class="pokemon-card" id="enemy-pokemon"></div>
                 </div>
+                
+                <!-- Секция ставок -->
                 <div id="bet-section" class="bet-container">
                     <h3>Сделайте ставку: кто победит?</h3>
+                    
+                    <!-- Контейнер для кнопок ставок -->
                     <div id="bet-buttons" class="bet-buttons-grid"></div>
+                    
+                    <!-- Кнопка начала битвы (изначально скрыта) -->
                     <button id="fight-btn" class="main-btn fight-btn hidden">
                         НАЧАТЬ БИТВУ
                     </button>
                 </div>
             </div>
 
+            <!-- Экран результатов (изначально скрыт) -->
             <div id="result-screen" class="hidden result-container">
                 <div class="result-content">
                     <h2>ПОБЕДИТЕЛЬ:</h2>
+                    
+                    <!-- Блок для отображения победителя -->
                     <div id="winner-display" class="winner-card"></div>
+                    
+                    <!-- Кнопки действий -->
                     <div class="action-buttons">
+                        <!-- Кнопка сохранения результата -->
                         <button id="save-btn" class="action-btn save-btn">
                             СОХРАНИТЬ
                         </button>
+                        
+                        <!-- Кнопка нового боя -->
                         <button id="new-battle" class="action-btn new-btn">
                             НОВЫЙ БОЙ
                         </button>
@@ -93,6 +137,7 @@
         </main>
     </div>
 
+    <!-- Подключение основного JavaScript-файла как модуля -->
     <script type="module" src="js/app.js"></script>
 </body>
 </html>
